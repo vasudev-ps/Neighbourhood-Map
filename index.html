@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Neighbourhood MAP</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="img/favicon.png" sizes="16x16">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <div id = "map"></div>
+        <span class="hamburger" onclick="toggleNav()">&#9776;</span>
+        <div id="Nav" class="nav">
+            <a href="javascript:void(0)" class="closebtn" onclick="toggleNav()" >&times;</a>
+
+            <div class="nav-content-title">
+                <div class="nav-title">Neighbourhood <span>MAP<span> </div>
+                <span class ="nav-subtitle">Find your nearest establishments</span>
+                <hr>
+            </div>
+
+            <div class="nav-content">
+                    <div class = "input">
+                        <label for="area-text"></label>
+                        <input id="area-text" type="text" placeholder="Enter the area to search.!">
+                        <input id="zoom-to-area" type="button" value="GO" data-bind = "click:addItem"><br><hr>
+                        <span class = 'wikititle'>Some usefull wikipedia links</span>
+                    </div>
+                    <div id = "wikipedia" class="wikipedia">
+                            <div class="column">
+                                <ul class="names" data-bind="foreach: link">
+                                    <li>
+                                        <span data-bind="text: $data"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="column">
+                                <ul class="links" data-bind="foreach: src">
+                                    <li>
+                                    <span><a target="_blank" href="" data-bind = "attr : {href:$data}">visit the page</a></span>
+                                    </li>
+                                </ul>
+                            </div>
+                    </div>
+                    <br>
+                    <hr>
+                    <div class = "services">
+                            <select id="service" onchange="find(this.value)">
+                            <option value="">Please select</option>
+                            <option value="hospital">hospital</option>
+                            <option value="restaurant">restaurant</option>
+                            <option value="police">police</option>
+                            <option value="bank">bank</option>
+                            <option value="school">school</option>
+                            <option value="train_station">train_station</option>
+                            </select>
+                            <span>Select the type of establishments to search here <strong>&#11014;</strong></span>
+                    </div>
+            </div>
+        </div>
+
+        <script src="js/libs/jquery.min.js"></script>
+        <script src="js/libs/knockout-3.4.1.js"></script>
+        <script src="js/map.js"></script>
+        <script src="js/app.js"></script>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyArWW5wQIxDKLTekSa1Jq_XgyKsrikVjDs&v=3&callback=initMap"></script>
+    </body>
+</html>
