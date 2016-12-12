@@ -113,9 +113,6 @@ ul, li{
 .links a{
     text-decoration: none;
 }
-.services span{
-    margin:auto;
-}
 /*infowindow*/
 .infowindow{
     background-color: rgba(0,0,0, 0.9);
