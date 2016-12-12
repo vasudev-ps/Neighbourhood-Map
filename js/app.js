@@ -1,11 +1,11 @@
     function toggleNav() {
         document.getElementById("Nav").classList.toggle("open");
     }
-
+    //change map center according user input in searchbox
     document.getElementById('zoom-to-area').addEventListener('click', function() {
         userArea();
     });
-
+    //Toggle the nav when clicked on map
     document.getElementById('map').addEventListener('click', function() {
         if ($("#Nav").hasClass("open")) {
             document.getElementById("Nav").classList.toggle("open");
@@ -16,6 +16,7 @@
         console.log(value);
         findPlaces(value);
     }
+    //Knockout viewmodel used to update wikipedia links automaticaly
     var viewModel = function() {
         var self = this;
         self.name = ko.observable("vasudev");
