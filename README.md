@@ -12,7 +12,7 @@ Neighbourhood-Map is a project where users can fetch details of their near-by es
 ###Manual
 User will first see their location on the map.(location service of browser should be on if not app will prompt the user).
 
-For more options user should click on the **hamberger menu on the top left side** of application and enter the options.
+For more options user should click on the **hamburger menu on the top left side** of application and enter the options.
 
 User can select the required establishments to be searched on the map directly **or** search a reqired place and then select the establishments
 
