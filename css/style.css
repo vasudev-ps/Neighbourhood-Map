@@ -72,7 +72,7 @@ select {
     border-radius: 4px;
     box-sizing: border-box;
 }
-input[type=button] {
+#zoom-to-area {
     width: 100%;
     background-color: rgba(0, 0, 0, 0.9);
     color: white;
@@ -92,20 +92,78 @@ input[type=button] {
     font-size: 1.5em;
     font-weight: bold;
 }
-ul,
-li {
+ul{
     margin: 0;
     padding: 0 0 0 15px;
     list-style: none;
     font-size: 1em;
     font-weight: bold;
 }
+li {
+    border-radius: 4px;
+    border: 0.5px solid #000;
+    margin-bottom: 0.25em;
+}
 .column {
     float: left;
     margin: 0 20px 0 0;
 }
+.wikinames span{
+    display: block;
+  width: 30ch;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.links li {
+    background-color: rgba(0, 0, 0, 0.9);
+
+}
 .links a {
     text-decoration: none;
+    color: white;
+}
+.serviceInfo{
+    font-weight: bold;
+    padding: 14px 0px;
+    margin: 8px 0;
+    text-align: center;
+}
+/*marker link*/
+#markerinfo{
+    font-weight: bold;
+    padding: 14px 0px;
+    margin: 8px 0;
+    text-align: center;
+}
+.markerNames span{
+  display: block;
+  width: 30ch;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+#mark {
+    width: 20%;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+    font-weight: bold;
+    padding: 14px 20px;
+    margin-left: 0.5em;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.markerlinks button {
+    background-color: rgba(0, 0, 0, 0.9);
+    border: none;
+    border-radius: 4px;
+    color: white;
+    padding: 0 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1em;
 }
 /*infowindow*/
 
@@ -138,5 +196,8 @@ li {
     }
     .wikititle {
         font-size: 1em;
+    }
+    .markerlinks button {
+    padding: 0 12px;
     }
 }

@@ -4,8 +4,14 @@ var defaultAddress = {
     lat: 12.9715987,
     lng: 77.59456269999998
 };
+var userLocaladrs,flag=0;
+var geoLoc = {
+    lat:0,
+    lng:0
+};
 var defaultId = "ChIJbU60yXAWrjsR4E9-UejD3_g";
-
+console.log(defaultAddress);
+var placeInfoWindow;
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         //mapTypeControlOptions: {mapTypeIds: [ ]},
@@ -26,7 +32,10 @@ function initMap() {
                 lng: position.coords.longitude
             };
             map.setCenter(pos);
+            userLocaladrs = pos;
+
             addMarkeronZoom(pos, " ");
+
 
         }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
@@ -40,8 +49,9 @@ function initMap() {
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     alert('Error: The Geolocation service failed. Default location will be set.');
     addMarkeronZoom(defaultAddress, defaultId);
+    flag=1;
 }
-
+//add marker to searched area.
 function addMarkeronZoom(pos, id) {
     var marker = new google.maps.Marker({
         position: pos,
@@ -50,6 +60,7 @@ function addMarkeronZoom(pos, id) {
         id: id,
         animation: google.maps.Animation.DROP
     });
+
     var defaultIcon = makeMarkerIcon('CC0000');
     var highlightedIcon = makeMarkerIcon('6600CC');
 
@@ -90,6 +101,7 @@ function hideMarkers(markers) {
         markers[i].setMap(null);
     }
 }
+//get users searched area using geocoder
 
 function userArea() {
     // Initialize the geocoder.
@@ -106,6 +118,8 @@ function userArea() {
             address: address
         }, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
+                geoLoc.lat = results[0].geometry.location.lat();
+                geoLoc.lng = results[0].geometry.location.lng();
                 map.setCenter(results[0].geometry.location);
                 map.setZoom(10);
                 addMarkeronZoom(results[0].geometry.location, results[0].place_id);
@@ -116,24 +130,43 @@ function userArea() {
         });
     }
 }
-
-
-function findPlaces(type) {
+//get the user lat lng when filter function is called
+function getplace(){
+    console.log(userLocaladrs);
+    var foo;
+    var geocoder = new google.maps.Geocoder();
+    var address = document.getElementById('area-text').value;
+    if(address == ''){
+        if(flag == 1){
+            return defaultAddress;
+            console.log("add + flg");
+        }
+        else{
+            console.log("add");console.log(userLocaladrs);
+            return userLocaladrs;
+        }
+    }
+    else{
+            return geoLoc;
+    }
+}
+//get markers using placesservice
+function findPlaces(type,loc,rad) {
     var bounds = map.getBounds();
     hideMarkers(placeMarkers);
     var placesService = new google.maps.places.PlacesService(map);
     placesService.textSearch({
         type: type,
-        bounds: bounds
+        location:loc,
+        radius: rad
     }, function(results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             createMarkersForPlaces(results);
-            console.log(results);
         }
     });
+    map.setZoom(10);
 }
-
-
+//creating marker for each mached places
 function createMarkersForPlaces(places) {
     var bounds = new google.maps.LatLngBounds();
     for (var i = 0; i < places.length; i++) {
@@ -154,9 +187,11 @@ function createMarkersForPlaces(places) {
             id: place.place_id,
             animation: google.maps.Animation.DROP
         });
+        //add names to global marker array
+        markerName[i] = place.name;
         // Create a single infowindow to be used with the place details information
         // so that only one is open at once.
-        var placeInfoWindow = new google.maps.InfoWindow();
+        placeInfoWindow = new google.maps.InfoWindow();
         // If a marker is clicked, do a place details search on it in the next function.
         marker.addListener('click', function() {
             if (placeInfoWindow.marker == this) {
@@ -176,8 +211,14 @@ function createMarkersForPlaces(places) {
     }
     map.fitBounds(bounds);
 }
+//serve to get info window when clicked from list side bar
+function callFromList(markerId){
+    if(placeInfoWindow){placeInfoWindow.close();}
+    placeInfoWindow = new google.maps.InfoWindow();
+    getPlacesDetails(placeMarkers[markerId], placeInfoWindow);
+}
 
-
+//gets detail of places for infowindow
 function getPlacesDetails(marker, infowindow) {
     var service = new google.maps.places.PlacesService(map);
     service.getDetails({

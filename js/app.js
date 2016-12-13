@@ -1,3 +1,4 @@
+    var markerValue = ' ';
     function toggleNav() {
         document.getElementById("Nav").classList.toggle("open");
     }
@@ -11,17 +12,37 @@
             document.getElementById("Nav").classList.toggle("open");
         }
     });
-
+    //find the markers within default 5km radius
     var find = function(value) {
-        console.log(value);
-        findPlaces(value);
+         markerValue = value;
+         var pos = getplace();
+         findPlaces(value,pos,5000);
     }
-    //Knockout viewmodel used to update wikipedia links automaticaly
+    //function to filter markers
+    var filter = function(dist){
+        if(markerValue == ' '){
+            alert("please select the establishment")
+        }
+        else{
+            var pos = getplace();
+            findPlaces(markerValue,pos,dist);
+        }
+    }
+    // function to place info window requested
+    // from list in navigation
+    var infoDisplay = function(value){
+        callFromList(value);
+        if ($("#Nav").hasClass("open")) {
+            document.getElementById("Nav").classList.toggle("open");
+        }
+    }
+    //Knockout viewmodel used to update wikipedia links and marker list automaticaly
     var viewModel = function() {
         var self = this;
         self.name = ko.observable("vasudev");
         self.link = ko.observableArray();
         self.src = ko.observableArray();
+        self.marker = ko.observableArray();
         self.addItem = function() {
             var address = document.getElementById('area-text').value;
             var wikiInput = address.split(", ");
@@ -38,6 +59,14 @@
                     clearTimeout(wikiTimeout);
                 }
             })
+        }
+        //remove all item from marker list
+        self.removeList = function(){
+            self.marker.removeAll();
+        }
+        //add all marker name to marker array
+        self.addMarkerName = function(){
+            self.marker(markerName);
         }
     };
     ko.applyBindings(new viewModel());
