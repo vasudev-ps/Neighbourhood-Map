@@ -12,9 +12,13 @@ Neighbourhood-Map is a project where users can fetch details of their near-by es
 ###Manual
 User will first see their location on the map.(location service of browser should be on if not app will prompt the user).
 
-For more options user should click on the hamberger menu on the top left side of application and enter the options.
+For more options user should click on the **hamberger menu on the top left side** of application and enter the options.
 
-User can select the required establishments to be searched on the map.  
+User can select the required establishments to be searched on the map directly **or** search a reqired place and then select the establishments
+
+The Markers will apear on the map **which can be filtered** on basis of distance from place.
+
+List of marker will appear on pressing a button.
 
 ###How does it work?
 Project Uses 
@@ -28,6 +32,7 @@ Project Uses
 * The Map will be focused upon the user input city and a marker will be placed.
 * If user selects any type of establishments. Markers will be placed based on the results of google places library.
 * On clicked on the marker the details of the places will be displayed in infowindow.
+* Marker list appears and can be filtered.
 
 To Experience the Site [Click Here](https://vasudev-ps.github.io/Neighbourhood-Map/).
 
