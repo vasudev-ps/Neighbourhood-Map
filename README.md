@@ -36,4 +36,4 @@ Project Uses
 
 To Experience the Site [Click Here](https://vasudev-ps.github.io/Neighbourhood-Map/).
 
-Feel free to exchange thaughts.
+Feel free to exchange thoughts.
