@@ -6,8 +6,8 @@
     //change map center according user input in searchbox
     document.getElementById('zoom-to-area').addEventListener('click', function() {
         userArea();
-        $("#service :selected").remove();
-        $("#filter :selected").remove();
+        $("#service :selected").removeAttr("selected");
+        $("#filter :selected").removeAttr("selected");
     });
     //Toggle the nav when clicked on map
     document.getElementById('map').addEventListener('click', function() {
@@ -45,6 +45,10 @@
         self.link = ko.observableArray();
         self.src = ko.observableArray();
         self.marker = ko.observableArray();
+        self.onWikiclick = function(){
+            self.marker.removeAll();
+            self.addItem();
+        }
         self.addItem = function() {
             var address = document.getElementById('area-text').value;
             var wikiInput = address.split(", ");
@@ -79,6 +83,7 @@
                 }
             })
         }
+
         //remove all item from marker list
         self.removeList = function(){
             self.marker.removeAll();
