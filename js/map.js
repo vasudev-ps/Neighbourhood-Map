@@ -10,7 +10,6 @@ var geoLoc = {
     lng:0
 };
 var defaultId = "ChIJbU60yXAWrjsR4E9-UejD3_g";
-console.log(defaultAddress);
 var placeInfoWindow;
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -31,12 +30,11 @@ function initMap() {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             };
-            map.setCenter(pos);
+            //map.setCenter(pos);
             userLocaladrs = pos;
-
+            getName(pos);
             addMarkeronZoom(pos, " ");
-
-
+            findPlaces('hospital',pos,5000);
         }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
         });
@@ -50,7 +48,31 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     alert('Error: The Geolocation service failed. Default location will be set.');
     addMarkeronZoom(defaultAddress, defaultId);
     flag=1;
+    findPlaces('hospital',defaultAddress,5000);
 }
+
+var getName = function(pos){
+    var name;
+    console.log(pos);
+    $.ajax({
+    url: 'http://maps.googleapis.com/maps/api/geocode/json?latlng='+pos.lat+','+pos.lng+'&sensor=false',
+    success: function(data){
+        retriveName(data);
+        }
+    });
+
+}
+var retriveName = function(data){
+            var arrAddress = data.results[0].address_components;
+        // iterate through address_component array
+        for(var i=0;i<arrAddress.length;i++){
+            if(arrAddress[i].types[0] == "locality"){
+                userLocalAddr = arrAddress[i].long_name;
+                break;
+                }
+            }console.log(userLocalAddr);
+}
+
 //add marker to searched area.
 function addMarkeronZoom(pos, id) {
     var marker = new google.maps.Marker({
@@ -61,9 +83,9 @@ function addMarkeronZoom(pos, id) {
         animation: google.maps.Animation.DROP
     });
 
+
     var defaultIcon = makeMarkerIcon('CC0000');
     var highlightedIcon = makeMarkerIcon('6600CC');
-
     infoWindow = new google.maps.InfoWindow();
 
     if (id != " ") {
@@ -168,6 +190,7 @@ function findPlaces(type,loc,rad) {
 }
 //creating marker for each mached places
 function createMarkersForPlaces(places) {
+    placeMarkers.length = 0;
     var bounds = new google.maps.LatLngBounds();
     for (var i = 0; i < places.length; i++) {
         var place = places[i];
@@ -220,6 +243,7 @@ function callFromList(markerId){
 
 //gets detail of places for infowindow
 function getPlacesDetails(marker, infowindow) {
+    marker.setAnimation(google.maps.Animation.BOUNCE);
     var service = new google.maps.places.PlacesService(map);
     service.getDetails({
         placeId: marker.id
@@ -256,8 +280,10 @@ function getPlacesDetails(marker, infowindow) {
             innerHTML += '</div></div>';
             infowindow.setContent(innerHTML);
             infowindow.open(map, marker);
+
             // Make sure the marker property is cleared if the infowindow is closed.
             infowindow.addListener('closeclick', function() {
+                marker.setAnimation(null);
                 infowindow.marker = null;
             });
         }

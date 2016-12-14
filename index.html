@@ -18,7 +18,7 @@
             <div class="nav-title">Neighbourhood <span>MAP<span> </div>
                 <span class ="nav-subtitle">Find your nearest establishments</span>
                 <hr>
-            </div>
+        </div>
 
             <div class="nav-content">
                 <div class="input">
@@ -51,7 +51,7 @@
                 <div class="services">
                     <select id="service" onchange="find(this.value)" data-bind="event: { change: removeList }">
                         <option value="">Please select</option>
-                        <option value="hospital">hospital</option>
+                        <option value="hospital" selected="selected">hospital</option>
                         <option value="restaurant">restaurant</option>
                         <option value="police">police</option>
                         <option value="bank">bank</option>
@@ -71,7 +71,7 @@
                         <option value="">Please select</option>
                         <option value="1000">< 1 Km</option>
                         <option value="3000">< 3 Km </option>
-                        <option value="5000">< 5 Km</option>
+                        <option value="5000" selected="selected">< 5 Km</option>
                         <option value="8000">< 8 Km</option>
                         <option value="10000">< 10 Km</option>
                     </select>
@@ -90,7 +90,7 @@
                     <div class="column">
                         <ul class="markerlinks" data-bind="foreach: marker">
                             <li>
-                        <span><button data-bind="value: $index" onClick="infoDisplay(this.value)">see the info</button></span>
+                        <button data-bind="value: $index" onClick="infoDisplay(this.value)">see the info</button>
                             </li>
                         </ul>
                     </div>
@@ -99,6 +99,7 @@
         </div>
         <!--global variable array -->
          <script>
+              var userLocalAddr = '';
               var markerName = new Array();
         </script>
         <!--all the libraries and js files -->

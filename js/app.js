@@ -1,10 +1,13 @@
-    var markerValue = ' ';
+    var markerValue = 'hospital';
+    var defaultAddress = 'Bangalore';
     function toggleNav() {
         document.getElementById("Nav").classList.toggle("open");
     }
     //change map center according user input in searchbox
     document.getElementById('zoom-to-area').addEventListener('click', function() {
         userArea();
+        $("#service :selected").remove();
+        $("#filter :selected").remove();
     });
     //Toggle the nav when clicked on map
     document.getElementById('map').addEventListener('click', function() {
@@ -16,7 +19,6 @@
     var find = function(value) {
          markerValue = value;
          var pos = getplace();
-         findPlaces(value,pos,5000);
     }
     //function to filter markers
     var filter = function(dist){
@@ -60,6 +62,23 @@
                 }
             })
         }
+        self.wikiFirst = function(){
+            if(userLocalAddr == ''){
+                var address = 'Bangalore';
+            }
+            else{
+                var address = userLocalAddr;
+            }
+            var wikiUrl = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" +
+                           address + "&format=json&callback=wikiCallback";
+            $.ajax(wikiUrl, {
+                dataType: 'jsonp',
+                success: function(data) {
+                    self.link(data[1]);
+                    self.src(data[3]);
+                }
+            })
+        }
         //remove all item from marker list
         self.removeList = function(){
             self.marker.removeAll();
@@ -68,5 +87,9 @@
         self.addMarkerName = function(){
             self.marker(markerName);
         }
+        setTimeout(function() {
+        self.wikiFirst();
+            }, 5000);
+
     };
     ko.applyBindings(new viewModel());

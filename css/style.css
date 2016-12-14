@@ -164,6 +164,7 @@ li {
     text-decoration: none;
     display: inline-block;
     font-size: 1em;
+    cursor: pointer;
 }
 /*infowindow*/
 
@@ -199,5 +200,13 @@ li {
     }
     .markerlinks button {
     padding: 0 12px;
+    }
+    .nav-title {
+    padding-left: 0.5em;
+    font-size: 1.5em;
+    font-weight: normal;
+    }
+    .nav-subtitle {
+    padding-left: 0.75em;
     }
 }
