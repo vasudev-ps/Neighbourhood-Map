@@ -55,7 +55,7 @@ var getName = function(pos){
     var name;
     console.log(pos);
     $.ajax({
-    url: 'http://maps.googleapis.com/maps/api/geocode/json?latlng='+pos.lat+','+pos.lng+'&sensor=false',
+    url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+pos.lat+','+pos.lng+'&sensor=false',
     success: function(data){
         retriveName(data);
         }
