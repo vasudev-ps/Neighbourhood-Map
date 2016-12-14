@@ -19,6 +19,7 @@
     var find = function(value) {
          markerValue = value;
          var pos = getplace();
+         findPlaces(value,pos,5000);
     }
     //function to filter markers
     var filter = function(dist){
