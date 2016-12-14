@@ -1,9 +1,10 @@
     var markerValue = 'hospital';
     var defaultAddress = 'Bangalore';
+
     function toggleNav() {
-        document.getElementById("Nav").classList.toggle("open");
-    }
-    //change map center according user input in searchbox
+            document.getElementById("Nav").classList.toggle("open");
+        }
+        //change map center according user input in searchbox
     document.getElementById('zoom-to-area').addEventListener('click', function() {
         userArea();
         $("#service :selected").removeAttr("selected");
@@ -17,36 +18,35 @@
     });
     //find the markers within default 5km radius
     var find = function(value) {
-         markerValue = value;
-         var pos = getplace();
-         findPlaces(value,pos,5000);
-    }
-    //function to filter markers
-    var filter = function(dist){
-        if(markerValue == ' '){
-            alert("please select the establishment")
-        }
-        else{
+            markerValue = value;
             var pos = getplace();
-            findPlaces(markerValue,pos,dist);
+            findPlaces(value, pos, 5000);
         }
-    }
-    // function to place info window requested
-    // from list in navigation
-    var infoDisplay = function(value){
-        callFromList(value);
-        if ($("#Nav").hasClass("open")) {
-            document.getElementById("Nav").classList.toggle("open");
+        //function to filter markers
+    var filter = function(dist) {
+            if (markerValue == ' ') {
+                alert("please select the establishment")
+            } else {
+                var pos = getplace();
+                findPlaces(markerValue, pos, dist);
+            }
         }
-    }
-    //Knockout viewmodel used to update wikipedia links and marker list automaticaly
+        // function to place info window requested
+        // from list in navigation
+    var infoDisplay = function(value) {
+            callFromList(value);
+            if ($("#Nav").hasClass("open")) {
+                document.getElementById("Nav").classList.toggle("open");
+            }
+        }
+        //Knockout viewmodel used to update wikipedia links and marker list automaticaly
     var viewModel = function() {
         var self = this;
         self.name = ko.observable("vasudev");
         self.link = ko.observableArray();
         self.src = ko.observableArray();
         self.marker = ko.observableArray();
-        self.onWikiclick = function(){
+        self.onWikiclick = function() {
             self.marker.removeAll();
             self.addItem();
         }
@@ -67,15 +67,14 @@
                 }
             })
         }
-        self.wikiFirst = function(){
-            if(userLocalAddr == ''){
+        self.wikiFirst = function() {
+            if (userLocalAddr == '') {
                 var address = 'Bangalore';
-            }
-            else{
+            } else {
                 var address = userLocalAddr;
             }
             var wikiUrl = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" +
-                           address + "&format=json&callback=wikiCallback";
+                address + "&format=json&callback=wikiCallback";
             $.ajax(wikiUrl, {
                 dataType: 'jsonp',
                 success: function(data) {
@@ -86,16 +85,16 @@
         }
 
         //remove all item from marker list
-        self.removeList = function(){
-            self.marker.removeAll();
-        }
-        //add all marker name to marker array
-        self.addMarkerName = function(){
+        self.removeList = function() {
+                self.marker.removeAll();
+            }
+            //add all marker name to marker array
+        self.addMarkerName = function() {
             self.marker(markerName);
         }
         setTimeout(function() {
-        self.wikiFirst();
-            }, 5000);
+            self.wikiFirst();
+        }, 5000);
 
     };
     ko.applyBindings(new viewModel());

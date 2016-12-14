@@ -18,7 +18,7 @@
             <div class="nav-title">Neighbourhood <span>MAP<span> </div>
                 <span class ="nav-subtitle">Find your nearest establishments</span>
                 <hr>
-        </div>
+            </div>
 
             <div class="nav-content">
                 <div class="input">
@@ -33,7 +33,7 @@
                 <div id="wikipedia" class="wikipedia">
                     <div class="column">
                         <ul class="names" data-bind="foreach: link">
-                            <li class = "wikinames">
+                            <li class="wikinames">
                                 <span data-bind="text: $data"></span>
                             </li>
                         </ul>
@@ -58,28 +58,35 @@
                         <option value="school">school</option>
                         <option value="train_station">train_station</option>
                     </select>
-                    <div class ="serviceInfo">
-                    <span>Select the type of establishments to search here <strong>&#11014;</strong></span>
+                    <div class="serviceInfo">
+                        <span>Select the type of establishments to search here <strong>&#11014;</strong></span>
                     </div>
                     <hr>
-                    <div class ="serviceInfo">
-                    <span>Select the distance to filter the markers here <strong>&#11015;</strong></span>
+                    <div class="serviceInfo">
+                        <span>Select the distance to filter the markers here <strong>&#11015;</strong></span>
                     </div>
                     <!--Filters the markers on the basis of distance from selected city -->
                     <div class="filter">
                         <select id="filter" onchange="filter(this.value)" data-bind="event: { change: removeList }">
-                        <option value="">Please select</option>
-                        <option value="1000">< 1 Km</option>
-                        <option value="3000">< 3 Km </option>
-                        <option value="5000" selected="selected">< 5 Km</option>
-                        <option value="8000">< 8 Km</option>
-                        <option value="10000">< 10 Km</option>
-                    </select>
+                            <option value="">Please select</option>
+                            <option value="1000">
+                                < 1 Km</option>
+                                    <option value="3000">
+                                        < 3 Km </option>
+                                            <option value="5000" selected="selected">
+                                                < 5 Km</option>
+                                                    <option value="8000">
+                                                        < 8 Km</option>
+                                                            <option value="10000">
+                                                                < 10 Km</option>
+                        </select>
                     </div>
                 </div>
                 <!--Markers list section binded with knockout -->
                 <div class="markerName">
-                    <div id ="markerinfo"><span >Click here to see the Marker list<input id="mark" type="button" value="GO" data-bind="click:addMarkerName"></span></div><hr>
+                    <div id="markerinfo"><span>Click here to see the Marker list<input id="mark" type="button" value="GO" data-bind="click:addMarkerName"></span>
+                    </div>
+                    <hr>
                     <div class="column">
                         <ul class="markerNames" data-bind="foreach: marker">
                             <li>
@@ -90,7 +97,7 @@
                     <div class="column">
                         <ul class="markerlinks" data-bind="foreach: marker">
                             <li>
-                            <button data-bind="value: $index" onClick="infoDisplay(this.value)">see the info</button>
+                                <button data-bind="value: $index" onClick="infoDisplay(this.value)">see the info</button>
                             </li>
                         </ul>
                     </div>
@@ -98,9 +105,9 @@
             </div>
         </div>
         <!--global variable array -->
-         <script>
-              var userLocalAddr = '';
-              var markerName = new Array();
+        <script>
+            var userLocalAddr = '';
+            var markerName = new Array();
         </script>
         <!--all the libraries and js files -->
         <script src="js/libs/jquery.min.js"></script>

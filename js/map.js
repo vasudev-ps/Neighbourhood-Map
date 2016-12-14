@@ -4,13 +4,14 @@ var defaultAddress = {
     lat: 12.9715987,
     lng: 77.59456269999998
 };
-var userLocaladrs,flag=0;
+var userLocaladrs, flag = 0;
 var geoLoc = {
-    lat:0,
-    lng:0
+    lat: 0,
+    lng: 0
 };
 var defaultId = "ChIJbU60yXAWrjsR4E9-UejD3_g";
 var placeInfoWindow;
+
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         //mapTypeControlOptions: {mapTypeIds: [ ]},
@@ -34,7 +35,7 @@ function initMap() {
             userLocaladrs = pos;
             getName(pos);
             addMarkeronZoom(pos, " ");
-            findPlaces('hospital',pos,5000);
+            findPlaces('hospital', pos, 5000);
         }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
         });
@@ -47,30 +48,31 @@ function initMap() {
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     alert('Error: The Geolocation service failed. Default location will be set.');
     addMarkeronZoom(defaultAddress, defaultId);
-    flag=1;
-    findPlaces('hospital',defaultAddress,5000);
+    flag = 1;
+    findPlaces('hospital', defaultAddress, 5000);
 }
 
-var getName = function(pos){
+var getName = function(pos) {
     var name;
     console.log(pos);
     $.ajax({
-    url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+pos.lat+','+pos.lng+'&sensor=false',
-    success: function(data){
-        retriveName(data);
+        url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + pos.lat + ',' + pos.lng + '&sensor=false',
+        success: function(data) {
+            retriveName(data);
         }
     });
 
 }
-var retriveName = function(data){
-            var arrAddress = data.results[0].address_components;
-        // iterate through address_component array
-        for(var i=0;i<arrAddress.length;i++){
-            if(arrAddress[i].types[0] == "locality"){
-                userLocalAddr = arrAddress[i].long_name;
-                break;
-                }
-            }console.log(userLocalAddr);
+var retriveName = function(data) {
+    var arrAddress = data.results[0].address_components;
+    // iterate through address_component array
+    for (var i = 0; i < arrAddress.length; i++) {
+        if (arrAddress[i].types[0] == "locality") {
+            userLocalAddr = arrAddress[i].long_name;
+            break;
+        }
+    }
+    console.log(userLocalAddr);
 }
 
 //add marker to searched area.
@@ -119,124 +121,125 @@ function makeMarkerIcon(markerColor) {
 }
 
 function hideMarkers(markers) {
-    for (var i = 0; i < markers.length; i++) {
-        markers[i].setMap(null);
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
     }
-}
-//get users searched area using geocoder
+    //get users searched area using geocoder
 
 function userArea() {
-    // Initialize the geocoder.
-    var geocoder = new google.maps.Geocoder();
-    // Get the address or place that the user entered.
-    var address = document.getElementById('area-text').value;
-    // Make sure the address isn't blank.
-    if (address == '') {
-        window.alert('You must enter an area, or address.');
-    } else {
-        // Geocode the address/area entered to get the center. Then, center the map
-        // on it and zoom in
-        geocoder.geocode({
-            address: address
-        }, function(results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-                geoLoc.lat = results[0].geometry.location.lat();
-                geoLoc.lng = results[0].geometry.location.lng();
-                map.setCenter(results[0].geometry.location);
-                map.setZoom(10);
-                addMarkeronZoom(results[0].geometry.location, results[0].place_id);
-            } else {
-                window.alert('We could not find that location - try entering a more' +
-                    ' specific place.');
-            }
-        });
-    }
-}
-//get the user lat lng when filter function is called
-function getplace(){
-    console.log(userLocaladrs);
-    var foo;
-    var geocoder = new google.maps.Geocoder();
-    var address = document.getElementById('area-text').value;
-    if(address == ''){
-        if(flag == 1){
-            return defaultAddress;
-            console.log("add + flg");
-        }
-        else{
-            console.log("add");console.log(userLocaladrs);
-            return userLocaladrs;
-        }
-    }
-    else{
-            return geoLoc;
-    }
-}
-//get markers using placesservice
-function findPlaces(type,loc,rad) {
-    var bounds = map.getBounds();
-    hideMarkers(placeMarkers);
-    var placesService = new google.maps.places.PlacesService(map);
-    placesService.textSearch({
-        type: type,
-        location:loc,
-        radius: rad
-    }, function(results, status) {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-            createMarkersForPlaces(results);
-        }
-    });
-    map.setZoom(10);
-}
-//creating marker for each mached places
-function createMarkersForPlaces(places) {
-    placeMarkers.length = 0;
-    var bounds = new google.maps.LatLngBounds();
-    for (var i = 0; i < places.length; i++) {
-        var place = places[i];
-        var icon = {
-            url: place.icon,
-            size: new google.maps.Size(35, 35),
-            origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(15, 34),
-            scaledSize: new google.maps.Size(25, 25)
-        };
-        // Create a marker for each place.
-        var marker = new google.maps.Marker({
-            map: map,
-            icon: icon,
-            title: place.name,
-            position: place.geometry.location,
-            id: place.place_id,
-            animation: google.maps.Animation.DROP
-        });
-        //add names to global marker array
-        markerName[i] = place.name;
-        // Create a single infowindow to be used with the place details information
-        // so that only one is open at once.
-        placeInfoWindow = new google.maps.InfoWindow();
-        // If a marker is clicked, do a place details search on it in the next function.
-        marker.addListener('click', function() {
-            if (placeInfoWindow.marker == this) {
-                console.log("This infowindow already is on this marker!");
-            } else {
-                getPlacesDetails(this, placeInfoWindow);
-            }
-        });
-
-        placeMarkers.push(marker);
-        if (place.geometry.viewport) {
-            // Only geocodes have viewport.
-            bounds.union(place.geometry.viewport);
+        // Initialize the geocoder.
+        var geocoder = new google.maps.Geocoder();
+        // Get the address or place that the user entered.
+        var address = document.getElementById('area-text').value;
+        // Make sure the address isn't blank.
+        if (address == '') {
+            window.alert('You must enter an area, or address.');
         } else {
-            bounds.extend(place.geometry.location);
+            // Geocode the address/area entered to get the center. Then, center the map
+            // on it and zoom in
+            geocoder.geocode({
+                address: address
+            }, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    geoLoc.lat = results[0].geometry.location.lat();
+                    geoLoc.lng = results[0].geometry.location.lng();
+                    map.setCenter(results[0].geometry.location);
+                    map.setZoom(10);
+                    addMarkeronZoom(results[0].geometry.location, results[0].place_id);
+                } else {
+                    window.alert('We could not find that location - try entering a more' +
+                        ' specific place.');
+                }
+            });
         }
     }
-    map.fitBounds(bounds);
-}
-//serve to get info window when clicked from list side bar
-function callFromList(markerId){
-    if(placeInfoWindow){placeInfoWindow.close();}
+    //get the user lat lng when filter function is called
+function getplace() {
+        console.log(userLocaladrs);
+        var foo;
+        var geocoder = new google.maps.Geocoder();
+        var address = document.getElementById('area-text').value;
+        if (address == '') {
+            if (flag == 1) {
+                return defaultAddress;
+                console.log("add + flg");
+            } else {
+                console.log("add");
+                console.log(userLocaladrs);
+                return userLocaladrs;
+            }
+        } else {
+            return geoLoc;
+        }
+    }
+    //get markers using placesservice
+function findPlaces(type, loc, rad) {
+        var bounds = map.getBounds();
+        hideMarkers(placeMarkers);
+        var placesService = new google.maps.places.PlacesService(map);
+        placesService.textSearch({
+            type: type,
+            location: loc,
+            radius: rad
+        }, function(results, status) {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                createMarkersForPlaces(results);
+            }
+        });
+        map.setZoom(10);
+    }
+    //creating marker for each mached places
+function createMarkersForPlaces(places) {
+        placeMarkers.length = 0;
+        var bounds = new google.maps.LatLngBounds();
+        for (var i = 0; i < places.length; i++) {
+            var place = places[i];
+            var icon = {
+                url: place.icon,
+                size: new google.maps.Size(35, 35),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(15, 34),
+                scaledSize: new google.maps.Size(25, 25)
+            };
+            // Create a marker for each place.
+            var marker = new google.maps.Marker({
+                map: map,
+                icon: icon,
+                title: place.name,
+                position: place.geometry.location,
+                id: place.place_id,
+                animation: google.maps.Animation.DROP
+            });
+            //add names to global marker array
+            markerName[i] = place.name;
+            // Create a single infowindow to be used with the place details information
+            // so that only one is open at once.
+            placeInfoWindow = new google.maps.InfoWindow();
+            // If a marker is clicked, do a place details search on it in the next function.
+            marker.addListener('click', function() {
+                if (placeInfoWindow.marker == this) {
+                    console.log("This infowindow already is on this marker!");
+                } else {
+                    getPlacesDetails(this, placeInfoWindow);
+                }
+            });
+
+            placeMarkers.push(marker);
+            if (place.geometry.viewport) {
+                // Only geocodes have viewport.
+                bounds.union(place.geometry.viewport);
+            } else {
+                bounds.extend(place.geometry.location);
+            }
+        }
+        map.fitBounds(bounds);
+    }
+    //serve to get info window when clicked from list side bar
+function callFromList(markerId) {
+    if (placeInfoWindow) {
+        placeInfoWindow.close();
+    }
     placeInfoWindow = new google.maps.InfoWindow();
     getPlacesDetails(placeMarkers[markerId], placeInfoWindow);
 }
